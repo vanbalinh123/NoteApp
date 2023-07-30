@@ -13,49 +13,76 @@
         android:textSize="24sp"
         android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/tvNoteContent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Note Content"
-        android:textSize="18sp"
-        android:textColor="@android:color/darker_gray"
-        android:layout_marginTop="8dp"
-        android:lineSpacingExtra="4dp" />
+    <!-- ScrollView for Note Content -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvNoteContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:lineSpacingExtra="4dp"
+                android:text="Note Content"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+    </ScrollView>
 
     <!-- LinearLayout for Buttons -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
         android:layout_marginTop="16dp"
-        android:gravity="end">
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/btnShareNote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:background="@android:color/holo_blue_dark"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp"
+            android:text="Share"
+            android:textColor="@android:color/white" />
+
 
         <Button
             android:id="@+id/btnEditNote"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Edit Note"
-            android:textColor="@android:color/white"
+            android:layout_marginEnd="20dp"
             android:background="@android:color/holo_blue_dark"
             android:paddingStart="16dp"
-            android:paddingEnd="16dp"
             android:paddingTop="8dp"
-            android:paddingBottom="8dp" />
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp"
+            android:text="Edit Note"
+            android:textColor="@android:color/white" />
 
         <Button
             android:id="@+id/btnDeleteNote"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Delete"
-            android:textColor="@android:color/white"
             android:background="@android:color/holo_red_dark"
             android:paddingStart="16dp"
-            android:paddingEnd="16dp"
             android:paddingTop="8dp"
+            android:paddingEnd="16dp"
             android:paddingBottom="8dp"
-            android:layout_marginStart="8dp" />
+            android:text="Delete"
+            android:textColor="@android:color/white" />
 
     </LinearLayout>
 

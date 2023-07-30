@@ -8,6 +8,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.SearchView;
+
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -17,6 +20,23 @@ public class MainActivity extends AppCompatActivity {
     private NoteAdapter noteAdapter;
     private ListView listView;
     private NoteDatabaseHelper databaseHelper;
+
+    private void searchNotes(String query) {
+        List<Note> filteredNotes = new ArrayList<>();
+        List<Note> allNotes = databaseHelper.getAllNotes();
+
+        for (Note note : allNotes) {
+            if (note.getTitle().toLowerCase().contains(query.toLowerCase()) ||
+                    note.getContent().toLowerCase().contains(query.toLowerCase())) {
+                filteredNotes.add(note);
+            }
+        }
+
+        noteAdapter.clear(); // Clear the current list in the adapter
+        noteAdapter.addAll(filteredNotes); // Add the filteredNotes to the adapter
+        noteAdapter.notifyDataSetChanged();
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +70,23 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        SearchView searchView = findViewById(R.id.searchView);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // Handle the search query when the user presses the search button.
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // Handle the search query as the user types.
+                searchNotes(newText);
+                return false;
+            }
+        });
+
 
         Button btnAddNote = findViewById(R.id.btnAddNote);
         btnAddNote.setOnClickListener(new View.OnClickListener() {

@@ -67,7 +67,15 @@ public class ViewNoteActivity extends AppCompatActivity {
                     tvNoteContent.setText(note.getContent());
                 }
             }
-        }
+        };
+
+        Button btnShareNote = findViewById(R.id.btnShareNote);
+        btnShareNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                shareNote();
+            }
+        });
     }
 
     private void showDeleteConfirmationDialog() {
@@ -88,4 +96,18 @@ public class ViewNoteActivity extends AppCompatActivity {
         });
         builder.show();
     }
+
+    private void shareNote() {
+        String title = tvNoteTitle.getText().toString();
+        String content = tvNoteContent.getText().toString();
+        String shareText = "Title: " + title + "\nContent: " + content;
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Shared Note");
+        intent.putExtra(Intent.EXTRA_TEXT, shareText);
+        startActivity(Intent.createChooser(intent, "Share Note via"));
+    }
+
+
 }

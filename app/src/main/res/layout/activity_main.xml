@@ -8,6 +8,14 @@
     tools:context=".MainActivity"
     android:padding="16dp">
 
+    <SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:queryHint="Search notes..."
+        android:iconifiedByDefault="false" />
+
+
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
