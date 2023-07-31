@@ -5,49 +5,48 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    TextView
-    android:id="@+id/tvNoteTitle"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Note Title"
-    android:textSize="24sp"
-    android:textStyle="bold" />
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Title">
 
-    <!-- ScrollView for Note Content -->
-    <ScrollView
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtEditTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- LinearLayout for Note Content -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
-            <com.google.android.material.textfield.TextInputLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Title">
+                android:orientation="vertical">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtEditTitle"
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_height="wrap_content"
+                    android:hint="Content">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Content">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtEditContent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtEditContent"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+        </ScrollView>
 
-        </LinearLayout>
-    </ScrollView>
+    </LinearLayout>
 
     <!-- LinearLayout for Buttons -->
     <LinearLayout
