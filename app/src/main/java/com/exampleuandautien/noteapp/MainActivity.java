@@ -26,8 +26,7 @@ public class MainActivity extends AppCompatActivity {
         List<Note> allNotes = databaseHelper.getAllNotes();
 
         for (Note note : allNotes) {
-            if (note.getTitle().toLowerCase().contains(query.toLowerCase()) ||
-                    note.getContent().toLowerCase().contains(query.toLowerCase())) {
+            if (note.getTitle().toLowerCase().contains(query.toLowerCase())) {
                 filteredNotes.add(note);
             }
         }

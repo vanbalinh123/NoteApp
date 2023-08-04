@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
 import com.google.android.material.textfield.TextInputEditText;
 
 public class AddNoteActivity extends AppCompatActivity {
@@ -31,9 +33,11 @@ public class AddNoteActivity extends AppCompatActivity {
                     Note newNote = new Note(title, content);
                     long id = databaseHelper.addNote(newNote);
                     newNote.setId((int) id);
-
+                    Toast.makeText(AddNoteActivity.this, "Add successful note!", Toast.LENGTH_SHORT).show();
                     setResult(RESULT_OK);
                     finish();
+                } else {
+                    Toast.makeText(AddNoteActivity.this, "Title can not be blank!", Toast.LENGTH_SHORT).show();
                 }
             }
         });

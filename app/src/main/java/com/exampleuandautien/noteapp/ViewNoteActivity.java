@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ViewNoteActivity extends AppCompatActivity {
     private TextView tvNoteTitle, tvNoteContent;
@@ -24,58 +25,10 @@ public class ViewNoteActivity extends AppCompatActivity {
     private void deleteNote() {
         if (note != null) {
             databaseHelper.deleteNoteById(note.getId());
+            Toast.makeText(ViewNoteActivity.this, "Deleted notes successfully!", Toast.LENGTH_SHORT).show();
             setResult(RESULT_OK);
             finish();
         }
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_note);
-
-        databaseHelper = new NoteDatabaseHelper(this);
-
-        tvNoteTitle = findViewById(R.id.tvNoteTitle);
-        tvNoteContent = findViewById(R.id.tvNoteContent);
-
-        Button btnEditNote = findViewById(R.id.btnEditNote);
-        btnEditNote.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openEditNoteActivity();
-            }
-        });
-
-        Button btnDeleteNote = findViewById(R.id.btnDeleteNote);
-        btnDeleteNote.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDeleteConfirmationDialog();
-            }
-        });
-
-        Intent intent = getIntent();
-        if (intent != null) {
-            int noteId = intent.getIntExtra("note_id", -1);
-            if (noteId != -1) {
-                // Retrieve the note from the database using the ID
-                note = databaseHelper.getNoteById(noteId);
-                if (note != null) {
-                    // Display the note's current title and content in the TextViews
-                    tvNoteTitle.setText(note.getTitle());
-                    tvNoteContent.setText(note.getContent());
-                }
-            }
-        };
-
-        Button btnShareNote = findViewById(R.id.btnShareNote);
-        btnShareNote.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                shareNote();
-            }
-        });
     }
 
     private void showDeleteConfirmationDialog() {
@@ -109,5 +62,52 @@ public class ViewNoteActivity extends AppCompatActivity {
         startActivity(Intent.createChooser(intent, "Share Note via"));
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_view_note);
 
+        databaseHelper = new NoteDatabaseHelper(this);
+
+        tvNoteTitle = findViewById(R.id.tvNoteTitle);
+        tvNoteContent = findViewById(R.id.tvNoteContent);
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            int noteId = intent.getIntExtra("note_id", -1);
+            if (noteId != -1) {
+                // Retrieve the note from the database using the ID
+                note = databaseHelper.getNoteById(noteId);
+                if (note != null) {
+                    // Display the note's current title and content in the TextViews
+                    tvNoteTitle.setText(note.getTitle());
+                    tvNoteContent.setText(note.getContent());
+                }
+            }
+        };
+
+        Button btnEditNote = findViewById(R.id.btnEditNote);
+        btnEditNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openEditNoteActivity();
+            }
+        });
+
+        Button btnDeleteNote = findViewById(R.id.btnDeleteNote);
+        btnDeleteNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDeleteConfirmationDialog();
+            }
+        });
+
+        Button btnShareNote = findViewById(R.id.btnShareNote);
+        btnShareNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                shareNote();
+            }
+        });
+    }
 }

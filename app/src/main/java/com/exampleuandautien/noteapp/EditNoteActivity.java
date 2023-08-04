@@ -28,59 +28,7 @@ public class EditNoteActivity extends AppCompatActivity {
     private Note note;
     private static final int CALL_PHONE_PERMISSION_REQUEST_CODE = 1;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_note);
-
-        databaseHelper = new NoteDatabaseHelper(this);
-
-        edtEditTitle = findViewById(R.id.edtEditTitle);
-        edtEditContent = findViewById(R.id.edtEditContent);
-
-        Button btnSaveEdit = findViewById(R.id.btnSaveEdit);
-        btnSaveEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String title = edtEditTitle.getText().toString().trim();
-                String content = edtEditContent.getText().toString().trim();
-
-                if (!title.isEmpty()) {
-                    note.setTitle(title);
-                    note.setContent(content);
-                    databaseHelper.updateNote(note);
-
-                    setResult(RESULT_OK);
-                    Intent intent = new Intent(EditNoteActivity.this, MainActivity.class);
-                    startActivity(intent);
-                }
-            }
-        });
-
-        // Get the note ID from the intent
-        int noteId = getIntent().getIntExtra("note_id", -1);
-        if (noteId != -1) {
-            // Retrieve the note from the database using the ID
-            note = databaseHelper.getNoteById(noteId);
-            if (note != null) {
-                // Display the note's current title and content in the EditText fields
-                edtEditTitle.setText(note.getTitle());
-                edtEditContent.setText(note.getContent());
-
-                // Make phone numbers in content clickable and linkified
-                Spannable spannable = (Spannable) edtEditContent.getText();
-                URLSpan[] urlSpans = spannable.getSpans(0, spannable.length(), URLSpan.class);
-                for (URLSpan urlSpan : urlSpans) {
-                    int start = spannable.getSpanStart(urlSpan);
-                    int end = spannable.getSpanEnd(urlSpan);
-                    spannable.removeSpan(urlSpan);
-                    spannable.setSpan(new PhoneClickableSpan(urlSpan.getURL()), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                }
-                edtEditContent.setMovementMethod(LinkMovementMethod.getInstance());
-            }
-        }
-    }
-
+    //Hàm để click được trong content, khi click gọi opendialer để mở ứng dụng call
     private class PhoneClickableSpan extends ClickableSpan {
         private String phoneNumber;
 
@@ -95,15 +43,16 @@ public class EditNoteActivity extends AppCompatActivity {
         }
     }
 
+    // Hàm để mở ứng dụng call
     private void openPhoneDialer(String phoneNumber) {
         // Loại bỏ các ký tự không cần thiết trong số điện thoại
         phoneNumber = phoneNumber.replaceAll("[^0-9]", "");
         Intent intent = new Intent(Intent.ACTION_DIAL);
         intent.setData(Uri.parse("tel:" + phoneNumber));
         startActivity(intent);
-
     }
 
+    // Kiểm tra đã cấp quyền hay chưa, nếu rồi tạo intent và truyền sdt
     private void makePhoneCall(String phoneNumber) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
             // Request permission if not granted yet
@@ -115,8 +64,6 @@ public class EditNoteActivity extends AppCompatActivity {
             startActivity(intent);
         }
     }
-
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -140,5 +87,60 @@ public class EditNoteActivity extends AppCompatActivity {
                 Toast.makeText(this, "Call Phone permission denied.", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_edit_note);
+
+        databaseHelper = new NoteDatabaseHelper(this);
+
+        edtEditTitle = findViewById(R.id.edtEditTitle);
+        edtEditContent = findViewById(R.id.edtEditContent);
+
+        // Get the note ID from the intent
+        int noteId = getIntent().getIntExtra("note_id", -1);
+        if (noteId != -1) {
+            // Retrieve the note from the database using the ID
+            note = databaseHelper.getNoteById(noteId);
+            if (note != null) {
+                // Display the note's current title and content in the EditText fields
+                edtEditTitle.setText(note.getTitle());
+                edtEditContent.setText(note.getContent());
+
+                // Make phone numbers in content clickable and linkified
+                Spannable spannable = (Spannable) edtEditContent.getText();
+                URLSpan[] urlSpans = spannable.getSpans(0, spannable.length(), URLSpan.class);
+                for (URLSpan urlSpan : urlSpans) {
+                    int start = spannable.getSpanStart(urlSpan);
+                    int end = spannable.getSpanEnd(urlSpan);
+                    spannable.removeSpan(urlSpan);
+                    spannable.setSpan(new PhoneClickableSpan(urlSpan.getURL()), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+                edtEditContent.setMovementMethod(LinkMovementMethod.getInstance());
+            }
+        }
+
+        Button btnSaveEdit = findViewById(R.id.btnSaveEdit);
+        btnSaveEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String title = edtEditTitle.getText().toString().trim();
+                String content = edtEditContent.getText().toString().trim();
+
+                if (!title.isEmpty()) {
+                    note.setTitle(title);
+                    note.setContent(content);
+                    databaseHelper.updateNote(note);
+                    Toast.makeText(EditNoteActivity.this, "Notes have been fixed successfully!", Toast.LENGTH_SHORT).show();
+                    setResult(RESULT_OK);
+                    Intent intent = new Intent(EditNoteActivity.this, MainActivity.class);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(EditNoteActivity.this, "Title can not be blank!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 }
